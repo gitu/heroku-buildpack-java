@@ -62,9 +62,9 @@ mvnOpts="${mvnOpts} ${MAVEN_CUSTOM_GOALS:-"clean install"}"
 status "Executing: mvn ${mvnOpts}"
 $CACHE_DIR/.maven/bin/mvn ${mvnOpts} | indent
 
-if [ -n "$MAVEN_CLEAN_PATH" ]; then
-  status "Cleaning all selected pattern"
-  find $BUILD_DIR -maxdepth 2 ! -name PATTERN -type f -print0
+if [ -n "$MAVEN_KEEP_PATH" ]; then
+  status "Cleaning all but selected pattern $MAVEN_KEEP_PATH"
+  find $BUILD_DIR -maxdepth 3 ! -name $MAVEN_KEEP_PATH -print0 | xargs -0n1 rm -rf
 fi
 
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
