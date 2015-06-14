@@ -62,6 +62,11 @@ mvnOpts="${mvnOpts} ${MAVEN_CUSTOM_GOALS:-"clean install"}"
 status "Executing: mvn ${mvnOpts}"
 $CACHE_DIR/.maven/bin/mvn ${mvnOpts} | indent
 
+if [ -n "$MAVEN_CLEAN_PATH" ]; then
+  status "Cleaning all selected pattern"
+  find $BUILD_DIR -maxdepth 2 ! -name PATTERN -type f -print0
+fi
+
 if [ "${PIPESTATUS[*]}" != "0 0" ]; then
   error "Failed to build app with Maven
 We're sorry this build is failing! If you can't find the issue in application code,
